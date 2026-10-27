@@ -151,3 +151,26 @@ main{position:relative;flex:1;min-height:0;width:100%;max-width:none;padding:6px
  color:#fff!important;font:bold 11px/1 system-ui,sans-serif!important;
  white-space:nowrap!important;z-index:1!important;
 }
+
+/* v1.0.9 — Vida dos heróis no fluxo do botão, sem coordenadas absolutas. */
+.seat .hero{
+ display:inline-flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+ align-items:center!important;justify-content:flex-start!important;
+ width:auto!important;max-width:100%!important;min-width:0!important;
+ gap:5px!important;padding:3px 6px 3px 3px!important;
+ box-sizing:border-box!important;overflow:hidden!important;
+}
+.seat .hero .portrait{flex:0 0 31px!important;width:31px!important;height:31px!important;}
+.seat .hero strong{
+ flex:0 1 auto!important;min-width:0!important;max-width:90px!important;
+ overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+}
+.seat .hero .life-orb{
+ position:static!important;inset:auto!important;top:auto!important;right:auto!important;
+ bottom:auto!important;left:auto!important;transform:none!important;
+ flex:0 0 auto!important;margin:0 0 0 2px!important;
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ min-width:34px!important;height:24px!important;padding:0 4px!important;
+ border:2px solid #e0ab7b!important;border-radius:14px!important;
+ font:bold 11px/1 system-ui,sans-serif!important;white-space:nowrap!important;
+}
