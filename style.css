@@ -139,3 +139,28 @@ main{position:relative;flex:1;min-height:0;width:100%;max-width:none;padding:6px
 .card-preview-host .preview-card .card-art{border-radius:50% 50% 9px 9px / 22% 22% 9px 9px!important}
 @media(max-height:650px){.lower{flex-basis:clamp(132px,31vh,170px)!important}.hand>.card{grid-template-rows:minmax(15px,22%) minmax(20px,45%) 9% minmax(0,1fr) 15%!important}.hand>.card .desc{display:-webkit-box!important;-webkit-line-clamp:2!important}}
 @media(max-height:450px){.lower{flex-basis:125px!important}.hand>.card .desc{display:none!important}.hand>.card{grid-template-rows:20% 55% 10% 0 15%!important}}
+
+/* v1.0.1 — corrigir atributos das criaturas no campo */
+.minion,.seat-0 .minion,.seat:not(.seat-0) .minion{
+ box-sizing:border-box!important;
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ min-width:0!important;overflow:hidden!important;gap:1px!important;
+}
+.minion .unit-art{flex:0 0 auto;min-width:0}
+.minion .name{width:100%;min-width:0;overflow:hidden;overflow-wrap:anywhere;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.02!important;min-height:0!important;flex:0 0 auto}
+.minion .keyword{min-width:0;max-width:100%;min-height:0!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:0 0 auto}
+.minion .numbers{
+ display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+ align-items:center!important;gap:1px!important;width:100%!important;min-width:0!important;
+ margin-top:auto!important;line-height:1!important;font-size:clamp(7px,.8vw,10px)!important;
+ white-space:nowrap!important;overflow:hidden!important;
+}
+.minion .numbers>span{
+ box-sizing:border-box!important;min-width:0!important;max-width:100%;
+ display:flex;justify-content:center;align-items:center;gap:2px;overflow:hidden;
+ border-radius:5px;padding:2px 1px;font-weight:800;line-height:1.1;
+ background:#262936;border:1px solid #8a7952;color:#f9e5c1;
+}
+.minion .numbers .stat-health{background:#50202c;border-color:#bc6572;color:#fff0ed}
+.minion .state{width:100%;min-height:0!important;max-height:12px;line-height:1!important;overflow:hidden!important;white-space:nowrap;text-overflow:ellipsis;font-size:clamp(6px,.68vw,8px)!important}
+@media(max-width:900px){.minion .numbers{font-size:7px!important}.minion .numbers>span{gap:0;padding:1px 0}.minion .state{font-size:6px!important}}
