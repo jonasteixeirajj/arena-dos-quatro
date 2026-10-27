@@ -76,25 +76,21 @@ main{position:relative;flex:1;min-height:0;width:100%;max-width:none;padding:6px
 #hand>.card[data-card-id="fireball"] .card-art,#hand>.card[data-card-id="bolt"] .card-art{background:radial-gradient(ellipse,#d48e55,#773f47 60%,#251e36)}
 #hand>.card[data-card-id="mend"] .card-art,#hand>.card[data-card-id="healer"] .card-art{background:radial-gradient(ellipse,#b5d699,#4c8072 60%,#183b47)}
 #hand>.card[data-card-id="guard"] .card-art,#hand>.card[data-card-id="giant"] .card-art{background:radial-gradient(ellipse,#d5d5d2,#70798c 60%,#233043)}
-/* A prévia é independente do layout da mão e nunca recebe posição do leque. */
-.card-preview-host{position:fixed;z-index:1000;width:230px;height:324px;display:none;pointer-events:none;filter:drop-shadow(0 12px 23px #000e)}
+
+/* v1.0.4: prévia grande usa classes próprias; não herda as regras .card */
+.card-preview-host{position:fixed;z-index:1000;width:250px;height:338px;display:none;pointer-events:none;filter:drop-shadow(0 14px 24px #000c)}
 .card-preview-host.visible{display:block}
-.card-preview-host>.preview-card{
- position:relative!important;display:grid!important;grid-template-rows:45px 126px 18px minmax(0,1fr) 27px!important;
- width:230px!important;height:324px!important;min-height:324px!important;max-height:324px!important;
- padding:10px!important;margin:0!important;gap:5px!important;
- left:auto!important;top:auto!important;transform:none!important;transition:none!important;
- opacity:1!important;border:6px ridge #9b713f!important;border-radius:18px!important;
- background:linear-gradient(145deg,#f9e8c0,#b39160 18%,#f2dfb5 46%,#be945b)!important;
- color:#2a1c12!important;box-shadow:inset 0 0 15px #a77842,0 15px 28px #000e!important;overflow:hidden!important;
-}
-.card-preview-host .top{display:grid!important;grid-template-columns:36px minmax(0,1fr)!important;gap:8px;align-items:center;position:static!important}
-.card-preview-host .cost{order:0!important;position:static!important;width:36px!important;height:36px!important;font-size:21px!important;display:grid;place-items:center}
-.card-preview-host .name{font:700 17px/1.07 Georgia,serif!important;display:block!important;overflow-wrap:anywhere!important;white-space:normal!important}
-.card-preview-host .card-art{position:static!important;height:126px!important;min-height:126px!important;display:grid;place-items:center;font-size:70px!important;border:4px ridge #ac8451;border-radius:45% 45% 10px 10px / 20% 20% 10px 10px;background:radial-gradient(ellipse,#8badb6,#31475c 65%,#172635)}
-.card-preview-host .kind{display:block!important;font-size:10px;text-align:center;letter-spacing:1px}
-.card-preview-host .desc{display:block!important;max-height:none!important;overflow:hidden!important;font-size:14px!important;line-height:1.2!important;padding:8px!important;background:#f4e6c9;border-radius:6px}
-.card-preview-host .power{display:block!important;font-size:16px!important;line-height:25px;text-align:center;background:#46382b;color:#ffe3a3;border-radius:18px}
+.large-card{box-sizing:border-box;display:grid;grid-template-rows:55px 126px 20px minmax(0,1fr) 28px;gap:5px;width:250px;height:338px;padding:9px;border:6px ridge #a47943;border-radius:19px;background:linear-gradient(135deg,#b28c5c,#f5e3bb 25%,#e3c799 80%,#926b3e);color:#2d1b10;box-shadow:inset 0 0 0 2px #f9e6b5,0 9px 22px #000b}
+.large-heading{display:grid;grid-template-columns:36px minmax(0,1fr);gap:7px;align-items:center;min-height:0}
+.large-mana{width:36px;height:36px;display:grid;place-items:center;border:2px ridge #bfebff;border-radius:50%;background:radial-gradient(circle at 30% 25%,#9de8ff,#247bcc 64%,#143368);color:white;font:bold 21px Georgia,serif}
+.large-name{font:bold 17px/1.14 Georgia,serif;text-align:center;display:block;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none;min-width:0;max-height:52px;overflow:hidden}
+.large-art{display:grid;place-items:center;border:4px ridge #a88552;border-radius:42% 42% 10px 10px/22% 22% 10px 10px;background:radial-gradient(ellipse,#93b9aa,#3c6b70 60%,#1d3544);font-size:73px;text-shadow:0 4px 8px #1119}
+.large-kind{text-align:center;font:bold 10px/20px Georgia,serif;letter-spacing:1px}
+.large-desc{padding:7px;background:#f2e4c9;border:1px solid #bba078;border-radius:6px;font:14px/1.2 Georgia,serif;overflow:hidden}
+.large-stats{display:grid;place-items:center;border-radius:18px;background:#463227;color:#ffe0a0;font:bold 16px Georgia,serif}
+#hand>.card .top{height:31px!important}
+#hand>.card .top .name{top:0!important;left:25px!important;right:1px!important;line-height:13px!important;font-size:10px!important;white-space:normal!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;max-height:28px!important;text-overflow:clip!important}
+#hand>.card .card-art{top:37px!important}
 @media(max-height:600px){.lower{flex-basis:clamp(136px,32vh,175px)}#hand>.card .card-art{top:29px;bottom:23px}#hand>.card .power{height:17px}}
 /* atributos no campo, pequenos e dentro da moldura */
 .minion,.seat-0 .minion,.seat:not(.seat-0) .minion{box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;gap:1px;min-width:0;overflow:hidden}
