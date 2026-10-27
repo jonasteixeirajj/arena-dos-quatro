@@ -66,15 +66,27 @@ function showCardPreview(source){
  if(handDrag || drag || !source || !source.isConnected)return;
  if(previewSource===source)return;
  const host=$('cardPreview');if(!host)return;
- const copy=source.cloneNode(true);
- copy.classList.remove('drag-source');copy.classList.add('preview-card');
- copy.removeAttribute('disabled');copy.removeAttribute('style');
- host.replaceChildren(copy);host.classList.add('visible');previewSource=source;
+ const name=source.querySelector('.name')?.textContent||'Carta';
+ const cost=source.querySelector('.cost')?.textContent||'0';
+ const art=source.querySelector('.card-art')?.textContent||'✦';
+ const kind=source.querySelector('.kind')?.textContent||'CARTA';
+ const desc=source.querySelector('.desc')?.textContent||'';
+ const power=source.querySelector('.power')?.textContent||'';
+ const card=document.createElement('div');card.className='large-card';
+ const heading=document.createElement('div');heading.className='large-heading';
+ const mana=document.createElement('span');mana.className='large-mana';mana.textContent=cost;
+ const title=document.createElement('strong');title.className='large-name';title.textContent=name;
+ heading.append(mana,title);
+ const illustration=document.createElement('div');illustration.className='large-art';illustration.textContent=art;
+ const category=document.createElement('div');category.className='large-kind';category.textContent=kind;
+ const description=document.createElement('div');description.className='large-desc';description.textContent=desc;
+ const stats=document.createElement('div');stats.className='large-stats';stats.textContent=power;
+ card.append(heading,illustration,category,description,stats);
+ host.replaceChildren(card);host.classList.add('visible');previewSource=source;
  const rect=source.getBoundingClientRect();
- const width=230, margin=12;
+ const width=250,margin=10;
  const left=Math.max(margin,Math.min(window.innerWidth-width-margin,rect.left+rect.width/2-width/2));
- // A prévia aparece sobre a mão, sem mexer no layout ou interceptar o mouse.
- const top=Math.max(10,Math.min(window.innerHeight-334,rect.top-344));
+ const top=Math.max(margin,Math.min(window.innerHeight-345,rect.top-349));
  host.style.left=left+'px';host.style.top=top+'px';
 }
 // Hand cards are handled through a pointer gesture, not click-based selection.
