@@ -164,24 +164,23 @@ $('endBtn').onclick=endTurn;$('cancelBtn').onclick=()=>{game.pending=null;game.s
 function layoutFanHand(){
  const hand=$('hand'),cards=[...hand.children],n=cards.length;
  if(!n)return;
- const w=hand.clientWidth||window.innerWidth-25,h=hand.clientHeight||125;
- // Carta inteira dentro do espaço reservado; não ultrapassa a borda inferior.
- const cardW=Math.min(116,Math.max(59,Math.min(w*.23,w/(Math.min(n,5)+.7))));
- const cardH=Math.max(70,Math.min(166,h-19));
- const step=n<=1?0:Math.min(cardW*.84,Math.max(16,(w-cardW-20)/(n-1)));
- const arc=Math.min(11,(n-1)*1.65);
+ const w=hand.clientWidth||window.innerWidth-25;
+ const h=hand.clientHeight||130;
+ const cardW=Math.min(119,Math.max(57,Math.min(w*.24,w/(Math.min(n,5)+.5))));
+ // Reserva margem para a rotação e nunca projeta a carta abaixo da janela.
+ const cardH=Math.max(64,Math.min(178,h-24));
+ const step=n<=1?0:Math.min(cardW*.88,Math.max(14,(w-cardW-22)/(n-1)));
+ const arc=Math.min(6,(n-1)*1.05);
  cards.forEach((card,i)=>{
   const t=n<=1?0:(i-(n-1)/2)/((n-1)/2);
   const x=w/2+(i-(n-1)/2)*step;
-  const angle=t*arc;
-  const drop=Math.abs(t)*Math.min(5,Math.max(0,h-cardH-10));
   card.style.setProperty('--fan-left',x+'px');
-  card.style.setProperty('--fan-angle',angle+'deg');
-  card.style.setProperty('--fan-drop',drop+'px');
+  card.style.setProperty('--fan-angle',(t*arc)+'deg');
+  card.style.setProperty('--fan-drop','0px');
   card.style.setProperty('--fan-width',cardW+'px');
   card.style.setProperty('--fan-height',cardH+'px');
   card.style.setProperty('--fan-order',String(i+1));
-  card.style.setProperty('--fan-top','2px');
+  card.style.setProperty('--fan-top','3px');
  });
 }
 window.addEventListener('resize',()=>{hideCardPreview();layoutFanHand();});
