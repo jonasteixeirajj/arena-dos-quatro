@@ -1,0 +1,3 @@
+Arena dos Quatro v0.7 - Correção do tremor da mão.
+Abra index.html no Chrome/Edge/Firefox.
+Nesta versão as cartas são preservadas entre renderizações e o posicionamento do leque não usa animação.
