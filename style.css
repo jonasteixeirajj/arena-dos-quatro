@@ -101,3 +101,33 @@ main{position:relative;flex:1;min-height:0;width:100%;max-width:none;padding:6px
 .minion .numbers>span{min-width:0;display:flex;align-items:center;justify-content:center;padding:2px 0;border-radius:5px;background:#262936;border:1px solid #8a7952;color:#f9e5c1}
 .minion .numbers .stat-health{background:#50202c;border-color:#bc6572;color:#fff0ed}
 .minion .state{min-height:0;max-height:12px;overflow:hidden;white-space:nowrap}
+
+/* v1.0.5 — títulos legíveis: sem colunas estreitas ou quebra no meio de palavras */
+#hand>.card .top{top:3px!important;left:4px!important;right:4px!important;height:29px!important;display:block!important}
+#hand>.card .top .name{
+ position:absolute!important;left:1px!important;right:1px!important;top:0!important;
+ width:calc(100% - 2px)!important;height:27px!important;max-height:27px!important;
+ padding:1px 2px!important;margin:0!important;
+ display:flex!important;align-items:flex-start!important;justify-content:center!important;
+ font:bold clamp(9px,1.35vh,12px)/1.12 Georgia,serif!important;
+ white-space:normal!important;word-break:keep-all!important;overflow-wrap:normal!important;
+ hyphens:none!important;text-align:center!important;overflow:hidden!important;
+ text-overflow:clip!important;
+}
+#hand>.card .top .cost{position:absolute!important;left:-2px!important;top:28px!important;z-index:4!important}
+#hand>.card .card-art{top:36px!important}
+.card-preview-host{width:260px!important;height:345px!important}
+.card-preview-host .large-card{width:260px!important;height:345px!important;grid-template-rows:57px 126px 18px minmax(0,1fr) 27px!important}
+.card-preview-host .large-heading{
+ display:block!important;position:relative!important;width:100%!important;
+ min-width:0!important;height:57px!important;
+}
+.card-preview-host .large-name{
+ position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;min-width:0!important;max-height:55px!important;
+ margin:0!important;padding:2px 3px!important;
+ font:700 19px/1.14 Georgia,serif!important;
+ white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important;
+ hyphens:none!important;text-align:center!important;overflow:hidden!important;
+}
+.card-preview-host .large-mana{position:absolute!important;left:0!important;top:63px!important;z-index:2!important}
