@@ -26,69 +26,6 @@ main{position:relative;flex:1;min-height:0;width:100%;max-width:none;padding:6px
 @media(max-width:740px){html,body{overflow:hidden}main{padding:4px}.arena-frame{overflow:hidden}#arena{display:block;height:calc(100% - 30px)}.arena-disc{display:block;width:78vw;height:78vw;max-height:75%;max-width:78vw}.arena-core{display:flex}.opponents,.player-area{display:contents}.seat,.seat-0,.seat-1,.seat-2,.seat-3{position:absolute;width:32%;min-height:0;transform:none}.seat-1{left:0;top:31%}.seat-2{left:34%;top:0}.seat-3{right:0;top:31%;left:auto}.seat-0{left:20%;bottom:0;width:60%}.seat-head{gap:2px}.seat .stats{font-size:8px}.hero strong{font-size:9px}.board{flex-wrap:wrap}.minion{width:30px}.lower{flex-basis:155px}.card{flex-basis:calc((100vw - 20px)/7);width:calc((100vw - 20px)/7);max-width:100px}.card .desc{display:none}}
 @media(max-height:650px){header{min-height:36px;padding:3px 12px}header h1{font-size:16px}.lower{flex-basis:118px}.card{height:90px}.card .desc{display:none}.arena-heading{height:23px}#arena{height:calc(100% - 23px)}.seat-head{margin-bottom:1px}.seat .board{min-height:45px}.minion{min-height:48px}.minion .state,.minion .keyword{display:none}}
 
-/* v0.4: fixed hand geometry; mouse/touch dragging rather than expanding on click */
-.card,.card:hover:not(:disabled),.card:focus,.card:active{
- transform:none!important; height:clamp(100px,17vh,158px)!important;
- min-height:0!important;overflow:hidden!important;z-index:auto!important;
- flex-grow:0;flex-shrink:1;touch-action:none;user-select:none;
-}
-.card:hover:not(:disabled){border-color:#f4d38b;box-shadow:0 0 16px #ffcc6188,0 6px 11px #000b}
-.card.drag-source{opacity:.46!important;filter:saturate(.5)}
-.drag-ghost{position:fixed!important;transform:translate(-50%,-65%) scale(1.13)!important;pointer-events:none!important;
- z-index:999!important;opacity:.96!important;box-shadow:0 18px 40px #000f,0 0 22px #f4c86d!important;min-height:0!important;max-width:none!important;flex:none!important;}
-.drop-valid{outline:3px solid #ebc35a!important;filter:brightness(1.17)}
-#playerArea.drop-valid .seat-0{outline:3px solid #ebc35a!important;box-shadow:0 0 27px #d8b85c99}
-.hand{overflow:hidden;align-items:flex-start}
-@media(max-height:650px){.card,.card:hover:not(:disabled){height:90px!important}}
-
-
-/* v0.5: mão em leque sem participar do fluxo do layout */
-.lower{isolation:isolate;overflow:visible;z-index:20;flex-basis:clamp(140px,23vh,190px);margin-top:0}
-.hand{position:relative;width:100%;height:calc(100% - 31px);overflow:visible!important;display:block!important;padding:0;margin:0;touch-action:none}
-.hand>.card{position:absolute!important;top:var(--fan-top,4px);left:var(--fan-left,50%);margin:0!important;width:var(--fan-width,110px)!important;flex:none!important;height:var(--fan-height,145px)!important;min-height:0!important;max-height:unset;transform-origin:50% 100%!important;transform:translateX(-50%) translateY(var(--fan-drop,0px)) rotate(var(--fan-angle,0deg))!important;z-index:var(--fan-order,1)!important;transition:transform .14s ease, filter .14s ease,box-shadow .14s ease!important;will-change:transform;overflow:hidden!important;}
-.hand>.card:hover:not(:disabled),.hand>.card:focus-visible{transform:translateX(-50%) translateY(calc(var(--fan-drop,0px) - 18px)) rotate(0deg)!important;z-index:40!important;box-shadow:0 10px 22px #000e,0 0 10px #facf6499!important;}
-.hand>.card:active{transform:translateX(-50%) translateY(var(--fan-drop,0px)) rotate(var(--fan-angle,0deg))!important}
-.hand>.card.drag-source{opacity:.38!important}
-.drag-ghost,.drag-ghost:hover,.drag-ghost:active{transform:translate(-50%,-65%) rotate(0deg) scale(1.12)!important;position:fixed!important;left:0;top:0;z-index:999!important;pointer-events:none!important;flex:none!important;opacity:.97!important;}
-@media(max-height:650px){.lower{flex-basis:125px}.hand>.card{height:var(--fan-height,90px)!important}}
-@media(max-width:740px){.lower{flex-basis:clamp(120px,25vh,170px)}.hand>.card{width:var(--fan-width,70px)!important}}
-
-/* v0.7: stop the hand from shaking during automated turns.
-   Fan placement is immediate; pointer hover only highlights the same fixed card. */
-.hand>.card{transition:none!important;will-change:auto!important;}
-.hand>.card:hover:not(:disabled),.hand>.card:focus-visible{transition:none!important;}
-.hand>.card.drag-source{transition:none!important;}
-
-/* v0.8 — Perspectiva fixa, com foco no jogador ativo; interações intactas. */
-:root{--gold:#f6ce78;--edge:#b18d54}
-.arena-frame{background:radial-gradient(ellipse at 50% 72%,#344338 0%,#1c2730 43%,#10151e 82%);border-color:#b18a50;box-shadow:inset 0 0 45px #000b,0 12px 25px #0008}
-#arena{width:min(100%,1250px);max-width:none}
-.arena-disc{width:86%;height:86%;max-width:none;max-height:none;left:50%;top:52%;border-radius:38% / 42%;border:9px ridge #79613c;background:linear-gradient(180deg,#172c3caa,#253c32bb 67%,#3e362bba),repeating-linear-gradient(95deg,#c5b07a09 0 3px,transparent 3px 34px);box-shadow:inset 0 0 80px #090e15d8,0 0 0 4px #161a1f,0 10px 40px #0008;pointer-events:none}
-.arena-disc:after{inset:7%;border-radius:35%;background:linear-gradient(180deg,transparent 29%,#cbb68133 29.2%,transparent 29.6%,transparent 68%,#cbb68133 68.3%,transparent 68.7%),linear-gradient(90deg,transparent 32%,#cbb68122 32.2%,transparent 32.5%,transparent 67%,#cbb68122 67.2%,transparent 67.5%)}
-.arena-core{width:54px;height:54px;top:49%;background:radial-gradient(circle,#4c5f51,#17212c);opacity:.8;box-shadow:0 0 15px #000c;z-index:1}
-.arena-core span{font-size:19px}.arena-core small{font-size:7px}
-.zone-label{position:absolute;z-index:1;pointer-events:none;font:bold 9px system-ui;letter-spacing:2px;color:#e2c9927a;text-shadow:0 2px 8px #000;white-space:nowrap}
-.zone-top{top:3%;left:50%;transform:translateX(-50%)}.zone-left{top:40%;left:6%}.zone-right{top:40%;right:6%}.zone-bottom{bottom:3%;left:50%;transform:translateX(-50%)}
-.seat{width:min(29%,325px);border-radius:13px;padding:7px;min-height:0;background:linear-gradient(140deg,#172333ee,#121c26e8);border:1px solid #806a4a;box-shadow:0 4px 19px #000a;transition:border-color .2s,background-color .2s,box-shadow .2s,filter .2s;z-index:3}
-.seat-1{top:50%;left:1%;transform:translateY(-50%)}
-.seat-2{top:1%;left:50%;transform:translateX(-50%)}
-.seat-3{top:50%;right:1%;transform:translateY(-50%)}
-.seat-0{width:min(56%,640px);bottom:1%;left:50%;transform:translateX(-50%);background:linear-gradient(160deg,#234033f5,#12231df2);border-color:#bb995e;z-index:4}
-.seat-0 .board{min-height:76px;gap:7px}.seat-0 .minion{width:clamp(50px,6vw,72px);min-height:77px;padding:4px}.seat-0 .unit-art{font-size:23px;line-height:26px}.seat-0 .minion .name{font-size:9px;min-height:16px}.seat-0 .minion .numbers{font-size:10px}.seat-0 .minion .state{font-size:8px}
-.seat:not(.seat-0) .board{gap:4px;min-height:66px;flex-wrap:nowrap}.seat:not(.seat-0) .minion{width:clamp(35px,4.3vw,52px);min-height:65px;flex-shrink:1}
-.seat.active{outline:none;border:2px solid #f9d17a;box-shadow:0 0 0 2px #f9d17a24,0 0 34px #efae4566,inset 0 0 14px #f6d37417;background-color:#314032}
-.seat.active .portrait{border-color:#ffe09b;box-shadow:0 0 16px #ffc35799}
-.seat.dead{filter:grayscale(1);opacity:.42}
-#arena[data-active-seat="1"] .seat-1,#arena[data-active-seat="2"] .seat-2,#arena[data-active-seat="3"] .seat-3{z-index:6}
-.seat-head{gap:8px}.seat-0 .hero{min-height:45px}.seat-0 .portrait{width:37px;height:37px}
-.seat .stats{white-space:normal}.minion.targetable,.hero.targetable{position:relative;z-index:7}
-.lower{z-index:10;border-color:#96713d;background:linear-gradient(#262d37ee,#0a111cef)}
-@media(max-width:900px){.seat{width:32%;padding:4px}.seat-0{width:65%}.seat:not(.seat-0) .minion{width:clamp(29px,4vw,42px)}.seat-0 .minion{width:clamp(35px,5vw,58px)}.seat-0 .board{min-height:58px}.seat-1{left:0}.seat-3{right:0}.zone-left,.zone-right{display:none}}
-@media(max-width:640px){#arena{height:calc(100% - 30px);display:block}.arena-disc{width:98%;height:95%;max-width:none;max-height:none}.seat{width:36%}.seat-2{width:52%;top:0}.seat-1{top:47%}.seat-3{top:47%}.seat-0{width:82%;bottom:0}.seat:not(.seat-0) .board{flex-wrap:wrap}.seat .stats{font-size:8px}.seat-0 .minion{width:clamp(32px,8vw,50px)}.zone-label{display:none}}
-@media(max-height:700px){.arena-core,.zone-label{display:none}.seat:not(.seat-0) .board{min-height:48px}.seat:not(.seat-0) .minion{min-height:47px}.seat-0 .board{min-height:48px}.seat-0 .minion{min-height:55px}.seat-0 .unit-art{font-size:17px;line-height:19px}.seat-0 .minion .name{font-size:7px}.seat-0 .minion .state{display:none}}
-@media(prefers-reduced-motion:reduce){.seat{transition:none}}
-
-
 /* v1.0.3 — layout único e estável das cartas, sem camadas conflitantes */
 .lower{flex:0 0 clamp(178px,32vh,234px);min-height:0;margin-top:0;padding:4px 10px 8px;overflow:visible;z-index:20}
 .hand-title{height:29px;margin:0}
