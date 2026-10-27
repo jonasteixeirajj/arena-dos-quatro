@@ -57,37 +57,48 @@ function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=
 function seat(p,ts){const div=el('div','seat seat-'+p.id+(!live(p)?' dead':'')+(game.turn===p.id&&!game.over?' active focus-turn':''));div.setAttribute('aria-label',p.name+' — '+(game.turn===p.id?'jogador ativo':'aguardando'));const head=el('div','seat-head');const hero=el('button','hero'+(targetable(ts,p,null)?' targetable':''));hero.innerHTML=`<span class="portrait">${['🧙','🔥','🌙','🌿'][p.id]}</span><strong>${p.name}</strong><span class="life-orb">♥ ${p.hp}</span>`;hero.dataset.targetPlayer=p.id;hero.dataset.targetUnit='hero';hero.disabled=!targetable(ts,p,null);hero.onclick=()=>{if(!suppressClick)targetClick(p.id,null)};head.append(hero,el('div','stats',`💧 ${p.mana}/${p.manaMax} · 🃏 ${p.hand.length} · 📚 ${p.deck.length}${p.coin?' · 🪙':''}`));if(p.id===0){const btn=el('button','secondary',`✨ Poder (2 mana)${p.powerUsed?' ✓':''}`);btn.disabled=game.phase!=='human'||p.mana<2||p.powerUsed||game.over;btn.onclick=selectPower;head.append(btn);}div.append(head);const board=el('div','board');if(!p.board.length)board.append(el('span','stats','Sem criaturas'));for(const m of p.board){const selected=p.id===0&&game.selected===m.uid;const active=targetable(ts,p,m);const b=el('button','minion'+(selected?' selected':'')+(active?' targetable':'')+(p.id===0&&m.ready?' ready':''));const kws=[m.taunt?'🛡️ Provocar':'',m.rush?'⚡ Investida':''].filter(Boolean).join(' ');b.innerHTML=`<span class="unit-art">${({squire:'⚔️',wolf:'🐺',guard:'🛡️',archer:'🏹',charger:'🐎',brute:'🪓',healer:'✨',giant:'🗿'})[m.id]||'⚜️'}</span><span class="name"></span><span class="keyword"></span><span class="numbers"><span class="stat-attack" title="Ataque">⚔ ${m.atk}</span><span class="stat-health" title="Vida">♥ ${m.hp}</span></span><span class="state"></span>`;b.querySelector('.name').textContent=m.name;b.querySelector('.keyword').textContent=kws;b.querySelector('.state').textContent=p.id===0?(m.attacks?'Atacou':m.ready?'Pronta':m.rush?'Investida':'Aguardando'):'';b.dataset.targetPlayer=p.id;b.dataset.targetUnit=m.uid;b.dataset.attacker=(p.id===0&&game.phase==='human'&&attackTargets(p,m).length)?m.uid:'';b.disabled=!(active||(p.id===0&&game.phase==='human'&&attackTargets(p,m).length));b.onclick=()=>{if(suppressClick)return;active?targetClick(p.id,m.uid):selectUnit(m.uid);};if(b.dataset.attacker)b.addEventListener('pointerdown',startAttackDrag);board.append(b);}div.append(board);return div;}
 function render(){hideCardPreview();document.getElementById('arena').dataset.activeSeat=String(game.turn);const ts=getTargets();$('opponents').replaceChildren(...game.players.slice(1).map(p=>seat(p,ts)));$('playerArea').replaceChildren(seat(game.players[0],ts));const hand=$('hand');const p=game.players[0];const existing=new Map([...hand.children].map(node=>[Number(node.dataset.handUid),node]));const ordered=[];for(const c of p.hand){let b=existing.get(c.uid);if(!b){b=el('button','card');b.innerHTML=`<div class="top"><span class="name"></span><span class="cost">${c.cost}</span></div><span class="card-art">${({squire:'⚔️',wolf:'🐺',guard:'🛡️',archer:'🏹',charger:'🐎',brute:'🪓',healer:'✨',giant:'🗿',bolt:'⚡',fireball:'🔥',mend:'💚',insight:'📜'})[c.id]||'✦'}</span><span class="kind">${c.type==='unit'?'CRIATURA':'FEITIÇO'}</span><span class="desc"></span><span class="power">${c.type==='unit'?`⚔️ ${c.atk} · ❤️ ${c.hp}`:'✦ Feitiço'}</span>`;b.querySelector('.name').textContent=c.name;b.querySelector('.desc').textContent=c.text;b.disabled=game.phase!=='human'||!canPlay(p,c)||game.over;b.dataset.handUid=c.uid;b.dataset.cardId=c.id;b.draggable=false;b.addEventListener('pointerenter',()=>showCardPreview(b));b.addEventListener('pointerleave',hideCardPreview);b.addEventListener('focus',()=>showCardPreview(b));b.addEventListener('blur',hideCardPreview);b.addEventListener('pointerdown',startHandDrag);b.addEventListener('dragstart',e=>e.preventDefault());b.onclick=e=>{e.preventDefault();};}b.disabled=game.phase!=='human'||!canPlay(p,c)||game.over;ordered.push(b);}if(ordered.length!==hand.children.length || ordered.some((node,i)=>hand.children[i]!==node)){hand.replaceChildren(...ordered);}layoutFanHand();$('handCount').textContent=`(${p.hand.length}/10)`;$('endBtn').disabled=game.phase!=='human'||game.over;$('cancelBtn').hidden=!game.pending&&game.selected===null;const status=game.over?(p.hp>0?'🏆 Você venceu!':'💀 Você foi derrotado!'):game.pending?'🎯 Escolha um alvo destacado em amarelo.':game.selected!==null?'⚔️ Escolha uma criatura ou herói inimigo para atacar.':game.phase==='human'?'Sua vez: jogue cartas, ataque com criaturas prontas e encerre o turno.':`É a vez de ${cur().name}.`; $('notice').textContent=status;const logs=$('log');logs.replaceChildren(...game.events.map(s=>el('p','',s)));}
 // A prévia usa um elemento separado da mão: nenhuma carta muda de tamanho ou posição.
+// Prévia isolada por Shadow DOM: regras antigas de .card/.top/.name não a afetam.
 let previewSource=null;
 function hideCardPreview(){
  const host=$('cardPreview');if(!host)return;
- host.replaceChildren();host.classList.remove('visible');previewSource=null;
+ host.classList.remove('visible');previewSource=null;
 }
 function showCardPreview(source){
- if(handDrag || drag || !source || !source.isConnected)return;
+ if(handDrag||drag||!source||!source.isConnected)return;
  if(previewSource===source)return;
  const host=$('cardPreview');if(!host)return;
- const name=source.querySelector('.name')?.textContent||'Carta';
- const cost=source.querySelector('.cost')?.textContent||'0';
- const art=source.querySelector('.card-art')?.textContent||'✦';
- const kind=source.querySelector('.kind')?.textContent||'CARTA';
- const desc=source.querySelector('.desc')?.textContent||'';
- const power=source.querySelector('.power')?.textContent||'';
- const card=document.createElement('div');card.className='large-card';
- const heading=document.createElement('div');heading.className='large-heading';
- const mana=document.createElement('span');mana.className='large-mana';mana.textContent=cost;
- const title=document.createElement('strong');title.className='large-name';title.textContent=name;
- heading.append(mana,title);
- const illustration=document.createElement('div');illustration.className='large-art';illustration.textContent=art;
- const category=document.createElement('div');category.className='large-kind';category.textContent=kind;
- const description=document.createElement('div');description.className='large-desc';description.textContent=desc;
- const stats=document.createElement('div');stats.className='large-stats';stats.textContent=power;
- card.append(heading,illustration,category,description,stats);
- host.replaceChildren(card);host.classList.add('visible');previewSource=source;
- const rect=source.getBoundingClientRect();
- const width=250,margin=10;
- const left=Math.max(margin,Math.min(window.innerWidth-width-margin,rect.left+rect.width/2-width/2));
- const top=Math.max(margin,Math.min(window.innerHeight-345,rect.top-349));
- host.style.left=left+'px';host.style.top=top+'px';
+ const root=host.shadowRoot||host.attachShadow({mode:'open'});
+ root.replaceChildren();
+ const style=document.createElement('style');
+ style.textContent=`
+ *{box-sizing:border-box}
+ .preview{width:260px;height:350px;display:flex;flex-direction:column;gap:6px;padding:10px;
+  border:6px ridge #a47943;border-radius:18px;background:linear-gradient(135deg,#b28c5c,#f5e3bb 25%,#e3c799 80%,#926b3e);
+  color:#2d1b10;box-shadow:inset 0 0 0 2px #f9e6b5,0 9px 22px #000b}
+ .title{height:54px;flex:0 0 54px;display:flex;align-items:center;justify-content:center;text-align:center;
+  width:100%;padding:0 7px;font:bold 19px/1.13 Georgia,serif;word-break:normal;overflow-wrap:normal;
+  white-space:normal;hyphens:none;overflow:hidden}
+ .art{position:relative;flex:0 0 124px;min-height:124px;border:4px ridge #aa8653;border-radius:42% 42% 9px 9px / 22% 22% 9px 9px;
+  display:grid;place-items:center;font-size:70px;background:radial-gradient(ellipse,#93b9aa,#3c6b70 60%,#1d3544)}
+ .mana{position:absolute;left:3px;top:5px;width:38px;height:38px;border:2px ridge #c0e4ff;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 25% 20%,#a8ebff,#247acc 65%,#193c7b);color:#fff;font:bold 21px Georgia,serif}
+ .kind{flex:0 0 18px;text-align:center;font:bold 10px/18px Georgia,serif;letter-spacing:1px}
+ .description{flex:1;min-height:0;padding:9px;background:#f3e5c9;border:1px solid #ad9168;border-radius:6px;
+  font:14px/1.22 Georgia,serif;overflow:hidden}
+ .stats{flex:0 0 26px;border-radius:18px;background:#463227;color:#ffe0a0;display:grid;place-items:center;font:bold 16px Georgia,serif}
+ `;
+ const card=document.createElement('div');card.className='preview';
+ const name=document.createElement('div');name.className='title';name.textContent=source.querySelector('.name')?.textContent||'Carta';
+ const art=document.createElement('div');art.className='art';art.append(document.createTextNode(source.querySelector('.card-art')?.textContent||'✦'));
+ const mana=document.createElement('div');mana.className='mana';mana.textContent=source.querySelector('.cost')?.textContent||'0';art.append(mana);
+ const kind=document.createElement('div');kind.className='kind';kind.textContent=source.querySelector('.kind')?.textContent||'CARTA';
+ const desc=document.createElement('div');desc.className='description';desc.textContent=source.querySelector('.desc')?.textContent||'';
+ const stats=document.createElement('div');stats.className='stats';stats.textContent=source.querySelector('.power')?.textContent||'';
+ card.append(name,art,kind,desc,stats);root.append(style,card);
+ const rect=source.getBoundingClientRect(),width=260,margin=10;
+ host.style.left=Math.max(margin,Math.min(window.innerWidth-width-margin,rect.left+rect.width/2-width/2))+'px';
+ host.style.top=Math.max(margin,Math.min(window.innerHeight-360,rect.top-362))+'px';
+ host.classList.add('visible');previewSource=source;
 }
 // Hand cards are handled through a pointer gesture, not click-based selection.
 // A floating clone follows the pointer; the original card never leaves the hand.
