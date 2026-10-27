@@ -164,25 +164,24 @@ $('endBtn').onclick=endTurn;$('cancelBtn').onclick=()=>{game.pending=null;game.s
 function layoutFanHand(){
  const hand=$('hand'),cards=[...hand.children],n=cards.length;
  if(!n)return;
- const w=hand.clientWidth||window.innerWidth-25;
- const h=hand.clientHeight||120;
- const cardW=Math.min(116,Math.max(60,Math.min(w*.27,w/(Math.min(n,5)+.6))));
- const cardH=Math.min(155,Math.max(82,h-8));
- // Sobreposição progressiva impede scroll horizontal mesmo com dez cartas.
- const step=n<=1?0:Math.min(cardW*.81,Math.max(17,(w-cardW-16)/(n-1)));
- const arc=Math.min(17,(n-1)*2.7);
+ const w=hand.clientWidth||window.innerWidth-25,h=hand.clientHeight||125;
+ // Carta inteira dentro do espaço reservado; não ultrapassa a borda inferior.
+ const cardW=Math.min(116,Math.max(59,Math.min(w*.23,w/(Math.min(n,5)+.7))));
+ const cardH=Math.max(70,Math.min(166,h-19));
+ const step=n<=1?0:Math.min(cardW*.84,Math.max(16,(w-cardW-20)/(n-1)));
+ const arc=Math.min(11,(n-1)*1.65);
  cards.forEach((card,i)=>{
-  const x=w/2+(i-(n-1)/2)*step;
   const t=n<=1?0:(i-(n-1)/2)/((n-1)/2);
+  const x=w/2+(i-(n-1)/2)*step;
   const angle=t*arc;
-  const drop=(1-t*t)*0+Math.abs(t)*Math.min(12,h*.08);
-  if(card.style.getPropertyValue('--fan-left')!==x+'px')card.style.setProperty('--fan-left',x+'px');
-  if(card.style.getPropertyValue('--fan-angle')!==angle+'deg')card.style.setProperty('--fan-angle',angle+'deg');
+  const drop=Math.abs(t)*Math.min(5,Math.max(0,h-cardH-10));
+  card.style.setProperty('--fan-left',x+'px');
+  card.style.setProperty('--fan-angle',angle+'deg');
   card.style.setProperty('--fan-drop',drop+'px');
   card.style.setProperty('--fan-width',cardW+'px');
   card.style.setProperty('--fan-height',cardH+'px');
   card.style.setProperty('--fan-order',String(i+1));
-  card.style.setProperty('--fan-top','4px');
+  card.style.setProperty('--fan-top','2px');
  });
 }
 window.addEventListener('resize',()=>{hideCardPreview();layoutFanHand();});
