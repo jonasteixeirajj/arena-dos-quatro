@@ -131,3 +131,23 @@ main{position:relative;flex:1;min-height:0;width:100%;max-width:none;padding:6px
  hyphens:none!important;text-align:center!important;overflow:hidden!important;
 }
 .card-preview-host .large-mana{position:absolute!important;left:0!important;top:63px!important;z-index:2!important}
+
+/* v1.0.7: pontos de vida dentro do medalhão do herói; sem sobreposição negativa */
+.seat .hero{
+ position:relative!important;display:inline-flex!important;align-items:center!important;
+ gap:5px!important;min-height:40px!important;
+ padding:3px 39px 3px 3px!important;max-width:100%!important;
+ overflow:visible!important;box-sizing:border-box!important;
+}
+.seat .hero strong{min-width:0!important;max-width:95px!important;line-height:1.15!important;overflow-wrap:normal!important;word-break:normal!important}
+.seat .hero .life-orb{
+ position:absolute!important;right:4px!important;left:auto!important;
+ top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;
+ box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;
+ justify-content:center!important;min-width:30px!important;height:23px!important;
+ padding:0 4px!important;margin:0!important;
+ border:2px solid #e0ab7b!important;border-radius:14px!important;
+ background:linear-gradient(#b63843,#61162a)!important;
+ color:#fff!important;font:bold 11px/1 system-ui,sans-serif!important;
+ white-space:nowrap!important;z-index:1!important;
+}
